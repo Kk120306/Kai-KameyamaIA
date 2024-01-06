@@ -6,26 +6,27 @@ import java.util.*;
 public class GameManager {
     private final List<Game> games; // List of all games
     Scanner scanner = new Scanner(System.in);
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // uses java class in order to fomrat and parse data in format.
     private final String dataFilePath = "gamesData.txt";
 
     public GameManager() {
         this.games = new ArrayList<>();
-        loadData();
+        loadData(); // loads in all the game data from previous sessions in .txt
     }
 
+    //method used to add game to the arraylist.
     public void addGame() {
         // Collecting and validating the date of the game
-        Date gameDate = null;
+        Date gameDate = null; // waits until there is a specified date
         while (gameDate == null) {
             System.out.println("\nEnter the game date (yyyy-MM-dd): --Enter blank for main menu");
             String dateString = scanner.nextLine().trim();
-            if (dateString.isEmpty()) {
+            if (dateString.isEmpty()) { // if there is no input
                 System.out.println("Returning to main menu");
                 return; // Return to main menu if input is empty
             }
             try {
-                gameDate = dateFormat.parse(dateString); // Parse the date
+                gameDate = dateFormat.parse(dateString); // Parse the date - helps make sure that its in a valid format
             } catch (Exception e) {
                 System.out.println("Invalid date format. Please enter in the format yyyy-MM-dd.");
             }
@@ -43,9 +44,9 @@ public class GameManager {
             }
         }
 
-        // Collecting and validating the names of goal scorers (assuming they are comma-separated)
+        // Collecting and validating the names of goal scorers ( comma-separated)
         System.out.println("Enter the names of goal scorers (comma-separated):");
-        List<String> goalScorers = new ArrayList<>(Arrays.asList(scanner.nextLine().split("\\s*,\\s*")));
+        List<String> goalScorers = new ArrayList<>(Arrays.asList(scanner.nextLine().split("\\s*,\\s*"))); // uses split method where , is used to split  stores in a new list
 
         // Collecting and validating MVP name
         String mvp;
@@ -66,14 +67,14 @@ public class GameManager {
         int redCards = getValidatedInteger("Enter total red cards:");
         double possessionPercentage = getValidatedDoubleInput("Enter possession percentage:");
 
-        Game newGame = new Game(gameDate, opponent, goalScorers, mvp, totalGoals, totalAssists, yellowCards, redCards, possessionPercentage); // Make sure your Game constructor matches these parameters
+        Game newGame = new Game(gameDate, opponent, goalScorers, mvp, totalGoals, totalAssists, yellowCards, redCards, possessionPercentage);
         games.add(newGame);
         System.out.println("New game added on " + dateFormat.format(gameDate));
     }
 
-    // Additional methods like listAllGames, findGameByDate, etc.
 
-    // Utility method for validated numeric input (as an example for total goals)
+
+    // Method to validate integer input  (as an example for total goals)
     private int getValidatedInteger(String prompt) {
         int number;
         while (true) {
@@ -91,6 +92,7 @@ public class GameManager {
         }
     }
 
+    // method to validate double input like possesion
     public double getValidatedDoubleInput(String txt) {
         double value;
         while (true) {
@@ -111,13 +113,14 @@ public class GameManager {
         }
     }
 
+    // used to disiplay all the games
     public void listGames() {
         if (games.isEmpty()) {
             System.out.println("No games have been added yet.");
             return;
         }
 
-        // Sort the games by date using a lambda expression
+        // Using the help of comparator to make syure that the dates are sorted in order.
         games.sort(Comparator.comparing(Game::getGameDate));
 
         // Print the details of each game using its toString method
@@ -125,8 +128,10 @@ public class GameManager {
             System.out.println(game.toString());
         }
     }
+
+    // uised to write all the data in to txt for future use
     public void saveData() {
-        try (PrintWriter out = new PrintWriter(new FileWriter(dataFilePath))) {
+        try (PrintWriter out = new PrintWriter(new FileWriter(dataFilePath))) { // allwos for formating
             for (Game game : games) {
                 out.println(gameToString(game));
             }
@@ -137,11 +142,11 @@ public class GameManager {
 
     // Method to load game data from a file
     public void loadData() {
-        games.clear();
+        games.clear(); // first clears all exisitng in the system
         File file = new File(dataFilePath);
         if (!file.exists()) {
             try {
-                if (file.createNewFile()) {
+                if (file.createNewFile()) { // if there is a fail that is created, dispaly
                     System.out.println("New data file created: " + dataFilePath);
                 } else {
                     System.err.println("Failed to create new data file: " + dataFilePath);
@@ -152,10 +157,10 @@ public class GameManager {
             }
         }
 
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) { // Used to read the input
             String line;
             while ((line = br.readLine()) != null) {
-                Game game = stringToGame(line);
+                Game game = stringToGame(line); // uses method to understand and parse data
                 if (game != null) {
                     games.add(game);
                 }
@@ -167,20 +172,20 @@ public class GameManager {
 
     private Game stringToGame(String data) {
         try {
-            String[] parts = data.split(",");
+            String[] parts = data.split(","); // splits the data when reading from a file
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-            Date gameDate = sdf.parse(parts[0]);
+            Date gameDate = sdf.parse(parts[0]); // parses according to the set pattern of the dates
             String opponent = parts[1];
-            List<String> goalScorers = Arrays.asList(parts[2].split(";")); // Assuming semicolon-separated
+            List<String> goalScorers = Arrays.asList(parts[2].split(";")); //  semicolon-separated
             String mvp = parts[3];
-            int totalGoals = Integer.parseInt(parts[4]);
+            int totalGoals = Integer.parseInt(parts[4]); // all parses them into specific variablesl
             int totalAssists = Integer.parseInt(parts[5]);
             int yellowCards = Integer.parseInt(parts[6]);
             int redCards = Integer.parseInt(parts[7]);
             double possessionPercentage = Double.parseDouble(parts[8]);
 
-            return new Game(gameDate, opponent, goalScorers, mvp, totalGoals, totalAssists, yellowCards, redCards, possessionPercentage);
+            return new Game(gameDate, opponent, goalScorers, mvp, totalGoals, totalAssists, yellowCards, redCards, possessionPercentage); // stores as a game object and then stores it in to game
         } catch (Exception e) {
             System.err.println("Error parsing game from string: " + e.getMessage());
             return null;
@@ -189,10 +194,10 @@ public class GameManager {
 
     private String gameToString(Game game) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String dateStr = sdf.format(game.getGameDate());
-        String goalScorersStr = String.join(";", game.getGoalScorers());
+        String dateStr = sdf.format(game.getGameDate()); // fomrats the data from the game object
+        String goalScorersStr = String.join(";", game.getGoalScorers()); // make sure that the game scores are not seeperated by the commma as this ill impact the readability of the file
 
-        // Concatenating all attributes into a comma-separated string
+        // all attirbutes to comma seperated string
         return dateStr + "," +
                 game.getOpponent() + "," +
                 goalScorersStr + "," +
@@ -203,8 +208,10 @@ public class GameManager {
                 game.getRedCards() + "," +
                 game.getPossessionPercentage();
     }
+
+    // updates or removes game stats
     public void updateGameStats() {
-        // Only run once for each invocation.
+        // Only run once
         listGames(); // Method to display all games
 
         System.out.println("\nEnter the date of the game you want to update (yyyy-MM-dd): --Enter 'exit' to return to main menu");
@@ -215,22 +222,22 @@ public class GameManager {
             return; // Return to main menu if user types 'exit'
         }
 
-        Date gameDate = parseDate(dateString); // Ensure you have a method to parse dates
+        Date gameDate = parseDate(dateString); // method  to parse dates
         if (gameDate == null) {
             System.out.println("Invalid date format. Please use the yyyy-MM-dd format.");
             return; // Return to the main menu if the date is invalid
         }
 
-        Game gameToUpdate = findGameByDate(gameDate);
+        Game gameToUpdate = findGameByDate(gameDate); // finds the game with the inputted date
 
         if (gameToUpdate != null) {
             String option = getValidatedString("Please select if you would like to remove or update a game. Enter 'remove' or 'update'.");
             if (option.equals("remove")) {
                 games.remove(gameToUpdate);
-                saveData(); // Assuming saveData method exists
+                saveData(); // save data methods to save in txt file
                 System.out.println("Game removed successfully.");
             } else if (option.equals("update")) {
-                updateGameDetails(gameToUpdate); // Assuming you have a method to update details
+                updateGameDetails(gameToUpdate); // method to update details
                 saveData(); // Save updated data
                 System.out.println("Game stats updated for " + dateString + ".");
             } else {
@@ -239,7 +246,7 @@ public class GameManager {
         } else {
             System.out.println("Game not found. Please try again.");
         }
-        // Method ends here, returning control to the main loop
+        // Method ends here,
     }
 
     private void updateGameDetails(Game game) {
@@ -276,7 +283,6 @@ public class GameManager {
         double newPossession = getValidatedDoubleInput("Enter new possession percentage (Current: " + game.getPossessionPercentage() + "):");
         game.setPossessionPercentage(newPossession);
 
-        // ... include other attributes as needed ...
     }
 
     private Game findGameByDate(Date date) {
@@ -288,16 +294,18 @@ public class GameManager {
         return null; // Return null if no matching game is found
     }
 
+    // used to part the dates into format
     private Date parseDate(String dateString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             return sdf.parse(dateString);
         } catch (ParseException e) {
             System.err.println("Invalid date format. Please use the yyyy-MM-dd format.");
-            return null; // Return null or handle this case as you see fit
+            return null; // Return null
         }
     }
 
+    // validates f the string is present
     private String getValidatedString(String prompt) {
         String input;
         while (true) {
@@ -311,9 +319,4 @@ public class GameManager {
             }
         }
     }
-
-
-
-
-
 }

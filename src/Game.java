@@ -2,8 +2,8 @@ import java.util.Date;
 import java.util.List;
 
 public class Game {
-    private Date gameDate;
-    private String opponent;
+    private final Date gameDate; //date of the using date class
+    private String opponent; // opponent the clients team palyed
     private List<String> goalScorers; // Players who scored in the game
     private String mvp; // Most Valuable Player
     private int totalGoals; // Total goals in the game
@@ -29,10 +29,6 @@ public class Game {
 
     public Date getGameDate() {
         return gameDate;
-    }
-
-    public void setGameDate(Date gameDate) {
-        this.gameDate = gameDate;
     }
 
     public String getOpponent() {
