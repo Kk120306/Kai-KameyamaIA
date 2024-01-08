@@ -8,25 +8,49 @@ public class GameManager {
     Scanner scanner = new Scanner(System.in);
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // uses java class in order to fomrat and parse data in format.
     private final String dataFilePath = "gamesData.txt";
+    private final Menu menu;
+
+
 
     public GameManager() {
         this.games = new ArrayList<>();
         loadData(); // loads in all the game data from previous sessions in .txt
+        menu = new Menu();
+    }
+    public void chooseOption(){
+        int selection = menu.getGameChoice();
+        switch (selection) {
+            case 1:
+                addGame(); // adds games
+                break;
+            case 2:
+                listGames(); // displays all games
+                break;
+            case 3:
+                updateGameStats(); // updates or removes game
+                break;
+        }
     }
 
     //method used to add game to the arraylist.
     public void addGame() {
         // Collecting and validating the date of the game
-        Date gameDate = null; // waits until there is a specified date
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false); // Set the SimpleDateFormat to non-lenient mode
+        Date gameDate = null;
+
         while (gameDate == null) {
             System.out.println("\nEnter the game date (yyyy-MM-dd): --Enter blank for main menu");
             String dateString = scanner.nextLine().trim();
-            if (dateString.isEmpty()) { // if there is no input
+
+            if (dateString.isEmpty()) {
                 System.out.println("Returning to main menu");
-                return; // Return to main menu if input is empty
+                return;
             }
+
             try {
-                gameDate = dateFormat.parse(dateString); // Parse the date - helps make sure that its in a valid format
+                gameDate = dateFormat.parse(dateString); // Attempt to parse the date
+                // Additional logic can be added here to ensure the date components (year, month, day) are within expected ranges if needed.
             } catch (Exception e) {
                 System.out.println("Invalid date format. Please enter in the format yyyy-MM-dd.");
             }

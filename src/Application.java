@@ -45,26 +45,19 @@ public class Application {
                     System.out.println("\n1. Add New Game"); // display the menu options for game modification -- used new menu as will be unorgianised with too many options
                     System.out.println("2. View All Games");
                     System.out.println("3. Update Game");
-                    int selection = menu.getGameChoice();
-                    switch (selection) {
-                        case 1:
-                            gameManager.addGame(); // adds games
-                            break;
-                        case 2:
-                            gameManager.listGames(); // displays all games
-                            break;
-                        case 3:
-                            gameManager.updateGameStats(); // updates or removes game
-                        case 10:
-                            statManager.saveData(); //saves all data in .txt
-                            gameManager.saveData(); // saves the game data to game txt
-                            System.out.println("Exiting the Football Statistics Application.");
-                            System.exit(0); // exits
-                            break;
-                        case 11:
-                            menu.getManual();
-                    }
+                    gameManager.chooseOption();
+                    break;
+
+                case 10:
+                    statManager.saveData(); //saves all data in .txt
+                    gameManager.saveData(); // saves the game data to game txt
+                    System.out.println("Exiting the Football Statistics Application.");
+                    System.exit(0); // exits
+                    break;
+                case 11:
+                    menu.getManual();
+                }
             }
         }
     }
-}
+

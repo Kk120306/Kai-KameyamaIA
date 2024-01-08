@@ -20,6 +20,8 @@ public class Menu {
         System.out.println("11. Help");
     }
 
+
+
     public int getChoice(){
         int choice; // doing this so that I dont have to write scanner.nextInt() every time in loop
         while (true) { // Loop indefinitely until a valid input is received
