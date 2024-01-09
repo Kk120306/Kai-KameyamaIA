@@ -97,8 +97,8 @@ public class Game {
 
     @Override
     public String toString() {
-        return "Game{" +
-                "gameDate=" + gameDate +
+        return "\nGame" +
+                " Game Date=" + gameDate +
                 ", opponent='" + opponent + '\'' +
                 ", goalScorers=" + goalScorers +
                 ", mvp='" + mvp + '\'' +

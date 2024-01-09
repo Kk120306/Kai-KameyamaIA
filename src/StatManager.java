@@ -86,6 +86,11 @@ public class StatManager {
                 continue;
             }
 
+            if(!name.matches("[a-zA-Z ]+")){
+                System.out.println("Make sure that the name is valid. Dont input numbers or other types other than characters");
+                continue;
+            }
+
             // Confirmation of entered name
             System.out.println("You entered '" + name + "'. Is this correct? (yes/no)");
             String confirmation = scanner.nextLine();
@@ -153,7 +158,7 @@ public double getValidatedDoubleInput(String txt) {
 
         boolean searching = true;
         while (searching) {
-            System.out.println("\nEnter Player's Name to view stats:");
+            System.out.println("\nEnter Player's Name to view stats: --Enter blank for main menu");
             String name = scanner.nextLine();
             Player player = playerMap.get(name.toLowerCase()); // using maps to easily locate the player instead of having to use loops etc.
 
@@ -203,7 +208,7 @@ public double getValidatedDoubleInput(String txt) {
 
         displayCurrentList();
 
-        System.out.println("\nEnter the name of the player whose stats you want to update:");
+        System.out.println("\nEnter the name of the player whose stats you want to update:  --Enter blank for main menu");
         String name = scanner.nextLine();
         Player playerToUpdate = playerMap.get(name.toLowerCase()); // uses map to easily get the player names with less time;
 
@@ -248,27 +253,28 @@ public double getValidatedDoubleInput(String txt) {
 
         // makes sure that the value is less than 4
         System.out.println("\nEnter the number of players you want to compare (up to 4): --Enter blank for main menu");
+
         int numPlayers;
         while (true) {
-            if(scanner.nextLine().isEmpty()){
+            String input = scanner.nextLine();
+
+            // Check for empty input to return to the main menu
+            if (input.isEmpty()) {
+                System.out.println("Returning to main menu.");
                 return;
             }
 
-            if (scanner.hasNextInt()) { // verifies if input is a integer.
-                numPlayers = scanner.nextInt();
-                scanner.nextLine(); // Makes sure that scanner dosent continue to loop if there are extra after integer.
+            try {
+                numPlayers = Integer.parseInt(input);
                 if (numPlayers > 1 && numPlayers <= 4) {
-                    break;
+                    break; // Valid input, exit the loop
+                } else {
+                    System.out.println("Please enter a number between 2 and 4.");
                 }
-                System.out.println("Please enter a number between 2 and 4.");
-
-            } else {
+            } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a number.");
-                scanner.next(); // Makes sure that scanner dosent continue to loop if there are extra after integer
             }
-            scanner.next();
         }
-
         // Initializing arraylist over linkedlists as there is not many insertions or deltions being made
         ArrayList<Player> playersToCompare = new ArrayList<>();
         // looping thorugh the number of players chosen
@@ -425,6 +431,10 @@ public double getValidatedDoubleInput(String txt) {
 
     // used by the generate linup method to print out all the selected starting playres.
     private void printSelectedPlayers(String positionGroup, List<Player> players, int numStarters) {
+        if (players.size() < numStarters) {
+            System.out.println(positionGroup + ": Not enough players to form the lineup.");
+            return;
+        }
         System.out.println(positionGroup + ":");
         for (int i = 0; i < numStarters; i++) { // itterates for the amount of starting per position that was previously declared in the seperate method.
             System.out.println(players.get(i).getName());

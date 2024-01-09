@@ -6,7 +6,6 @@ import java.util.*;
 public class GameManager {
     private final List<Game> games; // List of all games
     Scanner scanner = new Scanner(System.in);
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // uses java class in order to fomrat and parse data in format.
     private final String dataFilePath = "gamesData.txt";
     private final Menu menu;
 
@@ -57,32 +56,17 @@ public class GameManager {
         }
 
         // Collecting and validating the opponent's name
-        String opponent;
-        while (true) {
-            System.out.println("Enter opponent's name:");
-            opponent = scanner.nextLine().trim();
-            if (!opponent.isEmpty()) {
-                break;
-            } else {
-                System.out.println("Opponent's name cannot be empty. Please enter a valid name.");
-            }
-        }
+        String opponent = getValidName("Enter opponent's name:");
 
-        // Collecting and validating the names of goal scorers ( comma-separated)
         System.out.println("Enter the names of goal scorers (comma-separated):");
-        List<String> goalScorers = new ArrayList<>(Arrays.asList(scanner.nextLine().split("\\s*,\\s*"))); // uses split method where , is used to split  stores in a new list
-
-        // Collecting and validating MVP name
-        String mvp;
-        while (true) {
-            System.out.println("Enter the name of the Most Valuable Player (MVP):");
-            mvp = scanner.nextLine().trim();
-            if (!mvp.isEmpty()) {
-                break;
-            } else {
-                System.out.println("MVP's name cannot be empty. Please enter a valid name.");
+        List<String> goalScorers = new ArrayList<>();
+        for (String scorer : scanner.nextLine().split("\\s*,\\s*")) {
+            if (isValidString(scorer)) {
+                goalScorers.add(scorer);
             }
         }
+
+        String mvp = getValidName("Enter the name of the Most Valuable Player (MVP):");
 
 
         int totalGoals = getValidatedInteger("Enter total goals:");
@@ -96,6 +80,23 @@ public class GameManager {
         System.out.println("New game added on " + dateFormat.format(gameDate));
     }
 
+    private String getValidName(String prompt) {
+        String name;
+        while (true) {
+            System.out.println(prompt);
+            name = scanner.nextLine().trim();
+            if (isValidString(name)) {
+                break;
+            } else {
+                System.out.println("Name cannot be empty or Name cannot be other than letters. Please enter a valid name.");
+            }
+        }
+        return name;
+    }
+
+    private static boolean isValidString(String str) {
+        return str != null && !str.isEmpty() && str.matches("[a-zA-Z ]+"); // You can add more validation checks here if needed
+    }
 
 
     // Method to validate integer input  (as an example for total goals)
@@ -148,6 +149,7 @@ public class GameManager {
         games.sort(Comparator.comparing(Game::getGameDate));
 
         // Print the details of each game using its toString method
+        System.out.println("\n-- Games --");
         for (Game game : games) {
             System.out.println(game.toString());
         }
@@ -255,7 +257,7 @@ public class GameManager {
         Game gameToUpdate = findGameByDate(gameDate); // finds the game with the inputted date
 
         if (gameToUpdate != null) {
-            String option = getValidatedString("Please select if you would like to remove or update a game. Enter 'remove' or 'update'.");
+            String option = getValidatedString();
             if (option.equals("remove")) {
                 games.remove(gameToUpdate);
                 saveData(); // save data methods to save in txt file
@@ -275,16 +277,16 @@ public class GameManager {
 
     private void updateGameDetails(Game game) {
         // Update opponent
-        String newOpponent = getValidatedString("Enter new opponent (Current: " + game.getOpponent() + "):");
+        String newOpponent = getValidName("Enter new opponent (Current: " + game.getOpponent() + "):");
         game.setOpponent(newOpponent);
 
         // Update goal scorers
-        String goalScorersStr = getValidatedString("Enter goal scorers (comma-separated, Current: " + game.getGoalScorers().toString() + "):");
+        String goalScorersStr = getValidName("Enter goal scorers (comma-separated, Current: " + game.getGoalScorers().toString() + "):");
         List<String> newGoalScorers = Arrays.asList(goalScorersStr.split("\\s*,\\s*"));
         game.setGoalScorers(newGoalScorers);
 
         // Update MVP
-        String newMvp = getValidatedString("Enter new MVP (Current: " + game.getMvp() + "):");
+        String newMvp = getValidName("Enter new MVP (Current: " + game.getMvp() + "):");
         game.setMvp(newMvp);
 
         // Update total goals
@@ -330,10 +332,10 @@ public class GameManager {
     }
 
     // validates f the string is present
-    private String getValidatedString(String prompt) {
+    private String getValidatedString() {
         String input;
         while (true) {
-            System.out.println(prompt);
+            System.out.println("Please select if you would like to remove or update a game. Enter 'remove' or 'update'.");
             input = scanner.nextLine().trim(); // Trim to remove leading/trailing spaces
 
             if (!input.isEmpty()) {
