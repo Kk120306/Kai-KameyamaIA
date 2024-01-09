@@ -1,6 +1,9 @@
+import edu.princeton.cs.introcs.StdDraw;
+
 import java.util.*;
 import java.io.*;
 import java.util.stream.Collectors;
+
 // importing all necessary java utils for the class
 
 public class StatManager {
@@ -401,6 +404,11 @@ public double getValidatedDoubleInput(String txt) {
         printSubstitutes("\nDefender Substitutes", selectedDefenders, numDefenders);
         printSubstitutes("\nMidfielder Substitutes", selectedMidfielders, numMidfielders);
         printSubstitutes("\nAttacker Substitutes", selectedAttackers, numAttackers);
+
+        LineupVisualizer visualizer = new LineupVisualizer();
+        visualizer.drawField();
+        visualizer.drawFormation(selectedDefenders, selectedMidfielders, selectedAttackers);
+        StdDraw.show();
     }
 
     // used by the generate lineup method in order to liist out all the substitues from the list.

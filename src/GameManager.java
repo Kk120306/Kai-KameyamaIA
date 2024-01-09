@@ -3,6 +3,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+
 public class GameManager {
     private final List<Game> games; // List of all games
     Scanner scanner = new Scanner(System.in);
