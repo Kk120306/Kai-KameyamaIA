@@ -3,42 +3,48 @@ import java.util.List;
 
 public class LineupVisualizer {
 
-    public void drawField() {
-        StdDraw.setCanvasSize(800, 600);
-        StdDraw.setXscale(0, 100);
-        StdDraw.setYscale(0, 100);
+    private void drawSoccerField() {
+    // Draw the green field
+    StdDraw.setPenColor(StdDraw.GREEN);
+    StdDraw.filledRectangle(50, 50, 40, 30);
 
-        StdDraw.setPenColor(StdDraw.GREEN);
-        StdDraw.filledRectangle(50, 50, 40, 30);
-    }
+    // Draw the midfield line
+    StdDraw.setPenColor(StdDraw.WHITE);
+    StdDraw.line(50, 20, 50, 80);
 
-    public void drawPlayer(double x, double y, String name) {
-        StdDraw.setPenColor(StdDraw.WHITE);
-        StdDraw.filledCircle(x, y, 2);
-        StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.text(x, y - 3, name);
-    }
+    // Draw the center circle
+    StdDraw.circle(50, 50, 5);
 
-    public void drawFormation(List<Player> defenders, List<Player> midfielders, List<Player> attackers) {
-        double defenderY = 70;
-        double midfielderY = defenderY - 20; // Adjust as needed
-        double attackerY = midfielderY - 20; // Adjust as needed
-        int spacing = 10;
+    // Draw goal lines
+    StdDraw.rectangle(10, 50, 5, 10);  // Left goal
+    StdDraw.rectangle(90, 50, 5, 10);  // Right goal
+}
 
-        // Draw defenders
-        for (int i = 0; i < defenders.size(); i++) {
-            drawPlayer(10 + i * spacing, defenderY, defenders.get(i).getName());
+    private void drawPlayersOnField(List<Player> defenders, List<Player> midfielders, List<Player> attackers, List<Player> substitutes) {
+    drawPositionGroup(defenders, 20, 50, false); // Position the defenders
+    drawPositionGroup(midfielders, 50, 50, false); // Position the midfielders
+    drawPositionGroup(attackers, 80, 50, false); // Position the attackers
+    drawPositionGroup(substitutes, 50, 10, true); // Position the substitutes below the field
+}
+
+private void drawPositionGroup(List<Player> players, int xPosition, int baseYPosition, boolean isSubstitute) {
+    int yStep = (isSubstitute ? 5 : 100 / (players.size() + 1));
+    int yPos = baseYPosition;
+
+    for (Player player : players) {
+        if (!isSubstitute) {
+            yPos += yStep; // Update position for each player
         }
-
-        // Draw midfielders
-        for (int i = 0; i < midfielders.size(); i++) {
-            drawPlayer(10 + i * spacing, midfielderY, midfielders.get(i).getName());
-        }
-
-        // Draw attackers
-        for (int i = 0; i < attackers.size(); i++) {
-            drawPlayer(10 + i * spacing, attackerY, attackers.get(i).getName());
+        drawPlayer(player, xPosition, yPos, isSubstitute);
+        if (isSubstitute) {
+            yPos += yStep; // Update position for each substitute
         }
     }
+}
 
+private void drawPlayer(Player player, int x, int y, boolean isSubstitute) {
+    StdDraw.setPenColor(isSubstitute ? StdDraw.RED : StdDraw.BLUE);
+    StdDraw.filledCircle(x, y, 2);
+    StdDraw.text(x, y - (isSubstitute ? 3 : 5), player.getName());
+}
 }
