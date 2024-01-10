@@ -30,18 +30,18 @@ public class LineupVisualizer {
         drawLabel("Attackers", attackerX, 55);
 
         // Draw players horizontally
-        drawPlayers(defenders, defenderX, StdDraw.BLUE, 5, 50);
-        drawPlayers(midfielders, midfielderX, StdDraw.RED, 5, 50);
-        drawPlayers(attackers, attackerX, StdDraw.YELLOW, 5, 50);
+        drawPlayers(defenders, defenderX);
+        drawPlayers(midfielders, midfielderX);
+        drawPlayers(attackers, attackerX);
     }
 
-    private void drawPlayers(List<Player> players, double x, Color color, double startY, double endY) {
+    private void drawPlayers(List<Player> players, double x) {
         if (players.isEmpty()) return;
 
-        double spacing = (endY - startY) / Math.max(1, players.size() - 1);
+        double spacing = ((double) 50 - (double) 5) / Math.max(1, players.size() - 1);
 
         for (int i = 0; i < players.size(); i++) {
-            double y = startY + i * spacing;
+            double y = (double) 5 + i * spacing;
             drawPlayer(x, y, players.get(i).getName());
         }
     }
