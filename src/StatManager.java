@@ -405,10 +405,17 @@ public double getValidatedDoubleInput(String txt) {
         printSubstitutes("\nMidfielder Substitutes", selectedMidfielders, numMidfielders);
         printSubstitutes("\nAttacker Substitutes", selectedAttackers, numAttackers);
 
-        LineupVisualizer visualizer = new LineupVisualizer();
-        visualizer.drawField();
-        visualizer.drawFormation(selectedDefenders, selectedMidfielders, selectedAttackers);
-        StdDraw.show();
+        // Initialize StdDraw
+        StdDraw.setCanvasSize(800, 600);    
+        StdDraw.setXscale(0, 100);
+        StdDraw.setYscale(0, 100);
+
+    // Draw the soccer field
+        drawSoccerField();    
+
+    // Draw players on the field and substitutes
+        drawPlayersOnField(startingDefenders, startingMidfielders, startingAttackers, allSubstitutes);
+
     }
 
     // used by the generate lineup method in order to liist out all the substitues from the list.
