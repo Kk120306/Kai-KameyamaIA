@@ -405,17 +405,21 @@ public double getValidatedDoubleInput(String txt) {
         printSubstitutes("\nMidfielder Substitutes", selectedMidfielders, numMidfielders);
         printSubstitutes("\nAttacker Substitutes", selectedAttackers, numAttackers);
 
-        // Initialize StdDraw
-        StdDraw.setCanvasSize(800, 600);    
-        StdDraw.setXscale(0, 100);
-        StdDraw.setYscale(0, 100);
+        List<Player> allSubstitutes = new ArrayList<>(); // Populate this list with all substitutes
 
-    // Draw the soccer field
-        drawSoccerField();    
+        // Add code to populate allSubstitutes with the substitutes from each position
+        allSubstitutes.addAll(selectedDefenders.subList(numDefenders, selectedDefenders.size()));
+        allSubstitutes.addAll(selectedMidfielders.subList(numMidfielders, selectedMidfielders.size()));
+        allSubstitutes.addAll(selectedAttackers.subList(numAttackers, selectedAttackers.size()));
 
-    // Draw players on the field and substitutes
-        drawPlayersOnField(startingDefenders, startingMidfielders, startingAttackers, allSubstitutes);
-
+        // Visualization
+        LineupVisualizer visualizer = new LineupVisualizer();
+        visualizer.drawField();
+        visualizer.drawFormation(selectedDefenders.subList(0, numDefenders),
+                selectedMidfielders.subList(0, numMidfielders),
+                selectedAttackers.subList(0, numAttackers));
+        visualizer.drawSubstitutes(allSubstitutes);
+        StdDraw.show();
     }
 
     // used by the generate lineup method in order to liist out all the substitues from the list.
