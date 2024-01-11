@@ -407,17 +407,19 @@ public double getValidatedDoubleInput(String txt) {
 
         List<Player> allSubstitutes = new ArrayList<>(); // Populate this list with all substitutes
 
-        // Add code to populate allSubstitutes with the substitutes from each position
-        allSubstitutes.addAll(selectedDefenders.subList(numDefenders, selectedDefenders.size()));
-        allSubstitutes.addAll(selectedMidfielders.subList(numMidfielders, selectedMidfielders.size()));
-        allSubstitutes.addAll(selectedAttackers.subList(numAttackers, selectedAttackers.size()));
+        if (selectedDefenders.size() > numDefenders)
+            allSubstitutes.addAll(selectedDefenders.subList(numDefenders, selectedDefenders.size()));
+        if (selectedMidfielders.size() > numMidfielders)
+            allSubstitutes.addAll(selectedMidfielders.subList(numMidfielders, selectedMidfielders.size()));
+        if (selectedAttackers.size() > numAttackers)
+            allSubstitutes.addAll(selectedAttackers.subList(numAttackers, selectedAttackers.size()));
 
-        // Visualization
+// Visualization
         LineupVisualizer visualizer = new LineupVisualizer();
         visualizer.drawField();
-        visualizer.drawFormation(selectedDefenders.subList(0, numDefenders),
-                selectedMidfielders.subList(0, numMidfielders),
-                selectedAttackers.subList(0, numAttackers));
+        visualizer.drawFormation(selectedDefenders.subList(0, Math.min(numDefenders, selectedDefenders.size())),
+                selectedMidfielders.subList(0, Math.min(numMidfielders, selectedMidfielders.size())),
+                selectedAttackers.subList(0, Math.min(numAttackers, selectedAttackers.size())));
         visualizer.drawSubstitutes(allSubstitutes);
         StdDraw.show();
     }

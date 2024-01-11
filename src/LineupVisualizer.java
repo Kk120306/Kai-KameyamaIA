@@ -18,7 +18,7 @@ public class LineupVisualizer {
         StdDraw.rectangle(50, 30, 48, 28);
         // Additional field markings...
     }
-
+//linup
     public void drawFormation(List<Player> defenders, List<Player> midfielders, List<Player> attackers) {
         double defenderX = 15;
         double midfielderX = 30;
