@@ -189,7 +189,7 @@ public double getValidatedDoubleInput(String txt) {
 
         }
     }
-
+// mmethods
  // used for the other methods. can verify that the position is within the range (defender/midfielder/attacker)
      private String getValidatedPositionInput() {
          String position;
