@@ -438,7 +438,7 @@ public double getValidatedDoubleInput(String txt) {
     }
 
     // used by the generate linup method in order to create lists specific to the posions.
-
+    // chi
     private List<Player> filterPlayersByPosition(String position) {
         // Filter players by the given position
         List<Player> filteredPlayers = new ArrayList<>(); // creating a new arraylist (used over arrays as the size can be dynamic depending on the amoutn of players in the system)
