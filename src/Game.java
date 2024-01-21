@@ -27,6 +27,8 @@ public class Game {
         this.possessionPercentage = possessionPercentage;
     }
 
+    // all the settors and gettor methods
+
     public Date getGameDate() {
         return gameDate;
     }
@@ -95,6 +97,7 @@ public class Game {
         this.possessionPercentage = possessionPercentage;
     }
 
+    //toString method
     @Override
     public String toString() {
         return "\nGame" +

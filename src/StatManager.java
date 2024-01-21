@@ -23,7 +23,7 @@ public class StatManager {
 
     }
  // method to add new players to the sytesm
-
+ // Technique : for loop, if else, ArrayList
     public void displayCurrentList() {
         System.out.println("\nCurrent players in the system:");
         if (playerMap.isEmpty()) {
@@ -55,6 +55,7 @@ public class StatManager {
         }
     }
 
+    // Technique : Encapsulation
     public void addNewPlayer() {
 
         displayCurrentList();
@@ -132,28 +133,30 @@ public class StatManager {
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
-// method to ensure that double input in within a desired range of 0 - 100
-public double getValidatedDoubleInput(String txt) {
-        double value;
-        while (true) {
-            System.out.println(txt);
-            if (scanner.hasNextDouble()) { // makes sure that the value is a double and no other data type
-                value = scanner.nextDouble();
-                if (value >= (double) 0 && value <= (double) 100) {
-                    scanner.nextLine();
-                    return value;
-                } else { // loops until within a desired range
-                    System.out.println("Please enter a value between " + (double) 0 + " and " + (double) 100 + ".");
+    // method to ensure that double input in within a desired range of 0 - 100
+    // Technique : if else, while loops
+    public double getValidatedDoubleInput(String txt) {
+            double value;
+            while (true) {
+                System.out.println(txt);
+                if (scanner.hasNextDouble()) { // makes sure that the value is a double and no other data type
+                    value = scanner.nextDouble();
+                    if (value >= (double) 0 && value <= (double) 100) {
+                        scanner.nextLine();
+                        return value;
+                    } else { // loops until within a desired range
+                        System.out.println("Please enter a value between " + (double) 0 + " and " + (double) 100 + ".");
+                    }
+                } else {
+                    System.out.println("Invalid input. Please enter a number.");
+                    scanner.next();
                 }
-            } else {
-                System.out.println("Invalid input. Please enter a number.");
-                scanner.next();
+                scanner.nextLine(); // Makes sure that the program dosent loop out if there is any remaining input by the user from previous.
             }
-            scanner.nextLine(); // Makes sure that the program dosent loop out if there is any remaining input by the user from previous.
         }
-    }
 
 // allows the user to view player stats.
+// Technique : do while, Hashmaps, if else
     public void viewPlayerStats() {
 
         displayCurrentList();
@@ -189,8 +192,8 @@ public double getValidatedDoubleInput(String txt) {
 
         }
     }
-// mmethods
- // used for the other methods. can verify that the position is within the range (defender/midfielder/attacker)
+    // Technique : while, if else
+    // used for the other methods. can verify that the position is within the range (defender/midfielder/attacker)
      private String getValidatedPositionInput() {
          String position;
          while (true) {
@@ -205,7 +208,7 @@ public double getValidatedDoubleInput(String txt) {
          }
      }
 
-
+    // Technique : if else, while,encapsulation, hashmaps,
     // Used to update the player statistics
     public void updatePlayerStats() {
 
@@ -247,7 +250,7 @@ public double getValidatedDoubleInput(String txt) {
             System.out.println("Player not found.");
         }
     }
-
+    // Technique : if else, ArrayList, exception
     // used to compare the stats of the players. user can pick how many players up to 4 they can choose
     public void comparePlayerStats() {
 
@@ -298,7 +301,7 @@ public double getValidatedDoubleInput(String txt) {
 
         printPlayerComparison(playersToCompare); // uses methods to print the comparison in a valid format.
     }
-
+    // Technique : String formatting
     //Used to format the player comparioson that is being displayed, Allows for a cleaner system that the user cann use.
     private void printPlayerComparison(ArrayList<Player> players) {
 
@@ -319,14 +322,14 @@ public double getValidatedDoubleInput(String txt) {
         }
     }
 
-//method to export the data to CSV file
-
+    //method to export the data to CSV file
+    // Technique : Java Class - PrintWriter, Exception, for loops
     public void exportStatsToCSV(String filename) {
         // PrintWriter used in order to write a formatted text into a file.
         try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) { //attemps to create a file but can disply a error with catch is it dosent work
             // Write the header line for the CSV file
             pw.println("Name,Team,Position,Shot Percentage,Conversion Rate,Pass Percentage,Dribble Percentage,Crosses Percentage,Tackles Percentage");
-
+            players.sort(Comparator.comparing(Player::getName)); // makes sure CSV is in alphabeticall order
             // Write the player data
             for (Player player : players) {
                 pw.println(playerToCSVString(player));
@@ -338,6 +341,9 @@ public double getValidatedDoubleInput(String txt) {
         }
     }
 
+
+
+    // Technique : String formatting
     private String playerToCSVString(Player player) { // helps format all the data that is going to be exported.
         return player.getName() + "," +
                 player.getTeam() + "," +
@@ -349,7 +355,7 @@ public double getValidatedDoubleInput(String txt) {
                 player.getCrossesPercentage() + "," +
                 player.getTacklesPercentage();
     }
-
+    // Technique : arrays, Lists, stdDraw,
     // Generates a 11 aside linup with custom linup choice using the best player statistics.
     public void generateLineup() {
         System.out.println("Enter the desired formation (excluding goalkeeper, e.g., '4-4-2', '3-5-2'): ");
@@ -405,25 +411,27 @@ public double getValidatedDoubleInput(String txt) {
         printSubstitutes("\nMidfielder Substitutes", selectedMidfielders, numMidfielders);
         printSubstitutes("\nAttacker Substitutes", selectedAttackers, numAttackers);
 
-        List<Player> allSubstitutes = new ArrayList<>(); // Populate this list with all substitutes
+        List<Player> allSubstitutes = new ArrayList<>(); // fill out  this list with all substitutes
 
-        if (selectedDefenders.size() > numDefenders)
+        // makes sure there is no issues with the size of arrays etc
+        if (selectedDefenders.size() > numDefenders) // if there are more excess defender, add to sub
             allSubstitutes.addAll(selectedDefenders.subList(numDefenders, selectedDefenders.size()));
         if (selectedMidfielders.size() > numMidfielders)
             allSubstitutes.addAll(selectedMidfielders.subList(numMidfielders, selectedMidfielders.size()));
         if (selectedAttackers.size() > numAttackers)
             allSubstitutes.addAll(selectedAttackers.subList(numAttackers, selectedAttackers.size()));
 
-// Visualization
-        LineupVisualizer visualizer = new LineupVisualizer();
+        // Visualization
+        LineupVisualizer visualizer = new LineupVisualizer(); // create an instance of lineupvisualiser
         visualizer.drawField();
         visualizer.drawFormation(selectedDefenders.subList(0, Math.min(numDefenders, selectedDefenders.size())),
                 selectedMidfielders.subList(0, Math.min(numMidfielders, selectedMidfielders.size())),
                 selectedAttackers.subList(0, Math.min(numAttackers, selectedAttackers.size())));
         visualizer.drawSubstitutes(allSubstitutes);
-        StdDraw.show();
+        StdDraw.show(); // display on screen when ran
     }
 
+    // Technique : If else
     // used by the generate lineup method in order to liist out all the substitues from the list.
     private void printSubstitutes(String positionGroup, List<Player> players, int numStarters) {
         if (players.size() <= numStarters) { // makes sure that there is enough players for that substitues after printing out all the startesr.
@@ -438,7 +446,7 @@ public double getValidatedDoubleInput(String txt) {
     }
 
     // used by the generate linup method in order to create lists specific to the posions.
-    // chi
+    // Technique : ArrayList, For loop, if else
     private List<Player> filterPlayersByPosition(String position) {
         // Filter players by the given position
         List<Player> filteredPlayers = new ArrayList<>(); // creating a new arraylist (used over arrays as the size can be dynamic depending on the amoutn of players in the system)
@@ -449,7 +457,7 @@ public double getValidatedDoubleInput(String txt) {
         }
         return filteredPlayers;
     }
-
+    // Technique : If else, For loop
     // used by the generate linup method to print out all the selected starting playres.
     private void printSelectedPlayers(String positionGroup, List<Player> players, int numStarters) {
         if (players.size() < numStarters) {
@@ -462,7 +470,7 @@ public double getValidatedDoubleInput(String txt) {
         }
     }
 
-
+    // Technique : Java class - Comparator, ArrayLists, Java Class - Stream
     // method used to select the most suitabel player for each position for the starting lineup
     private List<Player> selectBestPlayers(List<Player> players, int numberToSelect, String position) {
         if (players.size() < numberToSelect) { // makes sure to verify that there is enough players to fill up starters for the position.
@@ -492,6 +500,7 @@ public double getValidatedDoubleInput(String txt) {
                 .limit(numberToSelect) // this meaks sure that the selected players are only within position limits.
                 .collect(Collectors.toList()); // This transomrs ikt back to a list where its able to gather playres
     }
+    // Technique : Java Class - PrintWriter, Exception handling, for loops
     // Method used by the system to save all the data in the txt file for future use.
     public void saveData() {
         try (PrintWriter out = new PrintWriter(new FileWriter(dataFilePath))) { // uses printwriter java class inorder to return a fomratted version of the infomraiton in a file
@@ -502,7 +511,8 @@ public double getValidatedDoubleInput(String txt) {
             System.err.println("Error saving data: " + e.getMessage());
         }
     }
-// used to load the previoous session data to the current session.
+    // Technique : Exception handling, if else, Java Class: File,BufferReader, Hashmaps, Lists
+    // used to load the previoous session data to the current session.
     public void loadData() {
         players.clear(); // clears out the list so that the existing players dont override.
         File file = new File(dataFilePath);
@@ -537,7 +547,7 @@ public double getValidatedDoubleInput(String txt) {
     }
 
     // Formating the players when storing in a file
-
+    // Technique : String Formating
     private String playerToString(Player player) {
         // Convert a Player object to a string format for file storage
         return player.getName() + "," + player.getTeam() + "," + player.getPosition() + "," +
@@ -547,6 +557,7 @@ public double getValidatedDoubleInput(String txt) {
     }
 
     // reading the file and converting it into a player obejct
+    // Technique : Encapsulation
     private Player stringToPlayer(String data) {
         // Convert a string from file to a Player object
         String[] values = data.split(",");
@@ -559,6 +570,7 @@ public double getValidatedDoubleInput(String txt) {
         return null;
     }
 
+    //Method used to clear files when clear function is called
     public void resetData() {
         players.clear(); // Clear the list of players
         playerMap.clear();
@@ -566,6 +578,8 @@ public double getValidatedDoubleInput(String txt) {
         saveData();
     }
 
+    // Method that calls the recursive bubble sort to organise by position
+    // Technique : for loops
     public void listPlayersByPosition() {
         recursiveBubbleSort(players, players.size());
         // Now list the players by position
@@ -573,7 +587,8 @@ public double getValidatedDoubleInput(String txt) {
             System.out.println(player.getPosition() + ": " + player.getName());
         }
     }
-
+    // Recursive bubble sort
+    // Technique : for loop, if else
     private void recursiveBubbleSort(List<Player> players, int n) {
         if(n==0){
             System.out.println("No players in the list");

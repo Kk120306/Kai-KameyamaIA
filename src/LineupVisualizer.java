@@ -1,24 +1,25 @@
 import edu.princeton.cs.introcs.StdDraw;
-
 import java.awt.*;
 import java.util.List;
+// Technique : StdDraw Princeton Univeristy
 public class LineupVisualizer {
 
+    // method is used to create the outline of the field.
     public void drawField() {
-        StdDraw.setCanvasSize(1000, 600);
-        StdDraw.setXscale(0, 100);
-        StdDraw.setYscale(0, 60);
+        StdDraw.setCanvasSize(1000, 600); // sets the size of the canvas
+        StdDraw.setXscale(0, 100); //setting X -a x
+        StdDraw.setYscale(0, 60);   // setting Y - ax
 
         // Field background
-        StdDraw.setPenColor(StdDraw.GREEN);
-        StdDraw.filledRectangle(50, 30, 48, 28);
+        StdDraw.setPenColor(StdDraw.GREEN); // green colour
+        StdDraw.filledRectangle(50, 30, 48, 28); // Drawing the filled rectangle
 
         // Draw field lines
-        StdDraw.setPenColor(StdDraw.WHITE);
+        StdDraw.setPenColor(StdDraw.WHITE); // white marking
         StdDraw.rectangle(50, 30, 48, 28);
-        // Additional field markings...
+
     }
-//linup
+//Responsibel for drawing the formation on the field
     public void drawFormation(List<Player> defenders, List<Player> midfielders, List<Player> attackers) {
         double defenderX = 15;
         double midfielderX = 30;
@@ -35,8 +36,9 @@ public class LineupVisualizer {
         drawPlayers(attackers, attackerX);
     }
 
+    // responsible for drawing the players and their names
     private void drawPlayers(List<Player> players, double x) {
-        if (players.isEmpty()) return;
+        if (players.isEmpty()) return; // makes sure to exit if there is n oplaeyrs
 
         double spacing = ((double) 50 - (double) 5) / Math.max(1, players.size() - 1);
 
@@ -46,6 +48,7 @@ public class LineupVisualizer {
         }
     }
 
+    // method responsibel for drawing a single player
     private void drawPlayer(double x, double y, String name) {
         // Draw player dot
         StdDraw.setPenColor(Color.BLACK);
@@ -61,6 +64,7 @@ public class LineupVisualizer {
         StdDraw.text(x, y - 2, name);
     }
 
+    // resp[onsible for drawing the semi transparent black label behind the text
     private void drawLabel(String label, double x, double y) {
         // Calculate the size of the background based on the text
         double textWidth = label.length() * 0.6; // Adjust multiplier as needed
@@ -75,6 +79,8 @@ public class LineupVisualizer {
         StdDraw.setFont(new Font("Arial", Font.BOLD, 12)); // Reduced font size
         StdDraw.text(x, y, label);
     }
+
+    // draws the subsittues in the corner of the field
 
     public void drawSubstitutes(List<Player> substitutes) {
         double x = 80; // Adjust X-coordinate for substitutes for better visibility

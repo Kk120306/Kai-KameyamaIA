@@ -7,7 +7,6 @@ Lucas Pond,U19,Attacker,37.0,21.1,30.0,31.0,24.0,13.0
 Emily Lake,U16,Attacker,33.0,18.0,23.5,19.5,12.5,8.5
 Jerome Stil,U19,Defender,20.0,2.0,2.0,2.0,2.0,2.0
 Eva Strong,U16,Defender,22.0,5.1,30.2,25.0,17.0,21.0
-William Gate,U19,Defender,22.0,2.0,22.0,2.0,34.0,23.0
 Mia Song,U16,Defender,23.5,6.0,31.9,27.0,18.5,20.0
 Alexander Bell,U19,Defender,19.5,5.5,27.8,24.0,20.0,23.0
 Chloe Bee,U16,Defender,24.0,7.0,32.5,28.0,19.0,19.0
@@ -18,4 +17,4 @@ James Bond,U19,Midfielder,28.0,12.1,40.3,35.0,21.0,17.0
 Ava Ray,U16,Midfielder,26.0,8.4,38.7,31.0,17.5,15.0
 Logan Berry,U19,Midfielder,29.5,13.4,41.6,36.0,22.5,18.0
 Isabella Moon,U16,Midfielder,25.5,9.0,37.4,29.5,16.0,14.0
-
+Jequaivons Tarquivaous,U19,Defender,20.3,92.3,20.1,29.1,23.1,28.3

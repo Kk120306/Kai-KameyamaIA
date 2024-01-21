@@ -3,6 +3,7 @@ public class Application {
     private final Menu menu;
     private final GameManager gameManager;
 
+    // loading all the classes
     public Application() {
         statManager = new StatManager(); // loads statManager for when user wishes to perform fucntionalities
         menu = new Menu(); // used to display menu interface
@@ -10,6 +11,8 @@ public class Application {
         gameManager = new GameManager();
     }
 
+    // Used for the Menu Interface
+    // Technique : Switch case, while loop
     public void start() {
         while (true) { // Infinite loop until the user presses exit option
             menu.displayMenu(); // displays the menu interface
@@ -47,7 +50,6 @@ public class Application {
                     System.out.println("3. Update Game");
                     gameManager.chooseOption();
                     break;
-
                 case 10:
                     statManager.saveData(); //saves all data in .txt
                     gameManager.saveData(); // saves the game data to game txt

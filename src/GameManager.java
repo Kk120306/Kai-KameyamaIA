@@ -1,14 +1,18 @@
+// Technique : Java Build in classes
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
-
+// Class responsible for handling and managing all the game data that the client inputs.
 public class GameManager {
     private final List<Game> games; // List of all games
-    Scanner scanner = new Scanner(System.in);
-    private final String dataFilePath = "gamesData.txt";
-    private final Menu menu;
+    Scanner scanner = new Scanner(System.in); // scanner
+    private final String dataFilePath = "gamesData.txt"; // Used for when saving data
+    private final Menu menu; // Call Menu for interface.
 
 
 
@@ -17,6 +21,8 @@ public class GameManager {
         loadData(); // loads in all the game data from previous sessions in .txt
         menu = new Menu();
     }
+    // Technique : Switch Case
+    // A second menu interface inside main that is responsible for all options (GAMES)
     public void chooseOption(){
         int selection = menu.getGameChoice();
         switch (selection) {
@@ -32,26 +38,28 @@ public class GameManager {
         }
     }
 
+    // Techniques : Time, Date, While loop, if, try catch
     //method used to add game to the arraylist.
     public void addGame() {
         // Collecting and validating the date of the game
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateFormat.setLenient(false); // Set the SimpleDateFormat to non-lenient mode
         Date gameDate = null;
+        dateFormat.setLenient(false);// Set the SimpleDateFormat to non-lenient mode - Makes sure that data makes sense in real life context
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // specifies format of date, used later for validation
 
         while (gameDate == null) {
             System.out.println("\nEnter the game date (yyyy-MM-dd): --Enter blank for main menu");
-            String dateString = scanner.nextLine().trim();
+            String dateString = scanner.nextLine().trim(); //Trims date, removes any empty space after input
 
-            if (dateString.isEmpty()) {
+            if (dateString.isEmpty()) { //returns back to menu if input is empty
                 System.out.println("Returning to main menu");
                 return;
             }
 
             try {
-                gameDate = dateFormat.parse(dateString); // Attempt to parse the date
-                // Additional logic can be added here to ensure the date components (year, month, day) are within expected ranges if needed.
-            } catch (Exception e) {
+                LocalDate parsedDate = LocalDate.parse(dateString, formatter);
+                gameDate = java.sql.Date.valueOf(parsedDate); // Convert LocalDate to java.sql.Date
+            } catch (DateTimeParseException e) {
                 System.out.println("Invalid date format. Please enter in the format yyyy-MM-dd.");
             }
         }
@@ -59,15 +67,16 @@ public class GameManager {
         // Collecting and validating the opponent's name
         String opponent = getValidName("Enter opponent's name:");
 
+        // Technique : ArrayLists
         System.out.println("Enter the names of goal scorers (comma-separated):");
         List<String> goalScorers = new ArrayList<>();
-        for (String scorer : scanner.nextLine().split("\\s*,\\s*")) {
-            if (isValidString(scorer)) {
-                goalScorers.add(scorer);
+        for (String scorer : scanner.nextLine().split("\\s*,\\s*")) { //Seperates by ','
+            if (isValidString(scorer)) { // if the names are validated
+                goalScorers.add(scorer); // adds player to list
             }
         }
 
-        String mvp = getValidName("Enter the name of the Most Valuable Player (MVP):");
+        String mvp = getValidName("Enter the name of the Most Valuable Player (MVP):"); // Collecting MVP names
 
 
         int totalGoals = getValidatedInteger("Enter total goals:");
@@ -75,18 +84,20 @@ public class GameManager {
         int yellowCards = getValidatedInteger("Enter total yellow cards:");
         int redCards = getValidatedInteger("Enter total red cards:");
         double possessionPercentage = getValidatedDoubleInput("Enter possession percentage:");
-
+        // Technique : Encapsulation
         Game newGame = new Game(gameDate, opponent, goalScorers, mvp, totalGoals, totalAssists, yellowCards, redCards, possessionPercentage);
         games.add(newGame);
         System.out.println("New game added on " + dateFormat.format(gameDate));
     }
 
+    // Method responsible for Validating the Name, ensuring in the right format and data type
+    // Technique : If-else statements
     private String getValidName(String prompt) {
         String name;
         while (true) {
             System.out.println(prompt);
             name = scanner.nextLine().trim();
-            if (isValidString(name)) {
+            if (isValidString(name)) { // using valid string method to verify
                 break;
             } else {
                 System.out.println("Name cannot be empty or Name cannot be other than letters. Please enter a valid name.");
@@ -95,12 +106,15 @@ public class GameManager {
         return name;
     }
 
+    // responsible for verifying the string - used in several methods
+
     private static boolean isValidString(String str) {
-        return str != null && !str.isEmpty() && str.matches("[a-zA-Z ]+"); // You can add more validation checks here if needed
+        return str != null && !str.isEmpty() && str.matches("[a-zA-Z ]+"); //
     }
 
 
     // Method to validate integer input  (as an example for total goals)
+    // Technique : while, if else, exception handling
     private int getValidatedInteger(String prompt) {
         int number;
         while (true) {
@@ -119,6 +133,7 @@ public class GameManager {
     }
 
     // method to validate double input like possesion
+    // Technique : while, if-else
     public double getValidatedDoubleInput(String txt) {
         double value;
         while (true) {
@@ -140,6 +155,7 @@ public class GameManager {
     }
 
     // used to disiplay all the games
+    // Technique : Java Class - Comparator
     public void listGames() {
         if (games.isEmpty()) {
             System.out.println("No games have been added yet.");
@@ -157,6 +173,7 @@ public class GameManager {
     }
 
     // uised to write all the data in to txt for future use
+    // Technique : Java class - PrintWriter , try catch, for loop
     public void saveData() {
         try (PrintWriter out = new PrintWriter(new FileWriter(dataFilePath))) { // allwos for formating
             for (Game game : games) {
@@ -168,6 +185,7 @@ public class GameManager {
     }
 
     // Method to load game data from a file
+    // Technique : java class - file, exception handling, if else
     public void loadData() {
         games.clear(); // first clears all exisitng in the system
         File file = new File(dataFilePath);
@@ -197,6 +215,8 @@ public class GameManager {
         }
     }
 
+    // Method responsible for converting strings to a Game object. Used for converting from txt file
+    // Technique : Encapsulation
     private Game stringToGame(String data) {
         try {
             String[] parts = data.split(","); // splits the data when reading from a file
@@ -219,6 +239,7 @@ public class GameManager {
         }
     }
 
+    // Responsible for converting game objects into string to input into txt file
     private String gameToString(Game game) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateStr = sdf.format(game.getGameDate()); // fomrats the data from the game object
@@ -237,6 +258,7 @@ public class GameManager {
     }
 
     // updates or removes game stats
+    // Technique : if else,
     public void updateGameStats() {
         // Only run once
         listGames(); // Method to display all games
@@ -273,9 +295,11 @@ public class GameManager {
         } else {
             System.out.println("Game not found. Please try again.");
         }
-        // Method ends here,
+
     }
 
+    // Method responsible for updating game details if the client wishes to remove or update game stats
+    // Technique : Encapsulation, setters,getters
     private void updateGameDetails(Game game) {
         // Update opponent
         String newOpponent = getValidName("Enter new opponent (Current: " + game.getOpponent() + "):");
@@ -312,6 +336,8 @@ public class GameManager {
 
     }
 
+    // responsible for finding the game using data input from users.
+    // Technique : for loop, if loop
     private Game findGameByDate(Date date) {
         for (Game game : games) {
             if (game.getGameDate().equals(date)) {
@@ -332,7 +358,7 @@ public class GameManager {
         }
     }
 
-    // validates f the string is present
+    // validates if the string is present
     private String getValidatedString() {
         String input;
         while (true) {

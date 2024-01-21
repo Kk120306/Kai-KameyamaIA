@@ -4,7 +4,7 @@ public class Menu {
     public Menu() {
         scanner = new Scanner(System.in); // will be used when gathering the number choice from user
     }
-
+    // responsble for outputing text for menu interface
     public void displayMenu(){
         System.out.println("\nFootball Statistics Application");
         System.out.println("1. Add New Player");
@@ -21,7 +21,8 @@ public class Menu {
     }
 
 
-
+    // Responsible for getting user input and validating so its within the valid range
+    // Technique : if else, while loops
     public int getChoice(){
         int choice; // doing this so that I dont have to write scanner.nextInt() every time in loop
         while (true) { // Loop indefinitely until a valid input is received
@@ -41,6 +42,8 @@ public class Menu {
         }
     }
 
+    // responsible for collecting user input when selecting game manager
+    // Technique : if else, while loop
     public int getGameChoice() {
         int choice; // doing this so that I dont have to write scanner.nextInt() every time in loop
         while (true) { // Loop indefinitely until a valid input is received
@@ -60,6 +63,7 @@ public class Menu {
         }
     }
 
+    // Method used to call the Manual
     public void getManual(){
         System.out.println("\n -- USER MANUAL --");
 
