@@ -429,6 +429,7 @@ public class StatManager {
                 selectedAttackers.subList(0, Math.min(numAttackers, selectedAttackers.size())));
         visualizer.drawSubstitutes(allSubstitutes);
         StdDraw.show(); // display on screen when ran
+        System.out.println("\nLineup generated successfully.");
     }
 
     // Technique : If else

@@ -101,10 +101,10 @@ public class Menu {
                 "Select \"Export Stats to CSV\" from the main menu.\n" +
                 "Enter the filename for the CSV file.\n" +
                 "The player data will be exported to the specified file.\n" +
-                "\nOption 8: Clear data\n" +
-                "Clears exsiting data of players in the system."+
-                "\nOption 9: Manage Games\n" +
-                "Add games with game statistics.");
+                "\nOption 8: Clear data:\n" +
+                "\nClears exsiting data of players in the system.\n"+
+                "\nOption 9: Manage Games:\n" +
+                "\nAdd games with game statistics.");
 
     }
 
