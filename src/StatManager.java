@@ -107,11 +107,13 @@ public class StatManager {
         String team;
         do {
             System.out.println("Enter Player's Team (U16/U19):");
-            team = scanner.nextLine();
-            if (!team.equals("U16") && !team.equals("U19")) {
+            team = scanner.nextLine().toLowerCase(); // Convert input to lowercase
+
+            if (!team.equals("u16") && !team.equals("u19")) { // Compare with lowercase values
                 System.out.println("Invalid input. Please enter 'U16' or 'U19'.");
             }
-        } while (!team.equals("U16") && !team.equals("U19"));
+        } while (!team.equals("u16") && !team.equals("u19"));
+
 
         String position = getValidatedPositionInput(); // used a seperate method to validate as this method will beconme quite confusing
 // uses the same methods to ensure that these values are in the desired range.
@@ -158,24 +160,24 @@ public class StatManager {
 // allows the user to view player stats.
 // Technique : do while, Hashmaps, if else
     public void viewPlayerStats() {
-
         displayCurrentList();
-
 
         boolean searching = true;
         while (searching) {
             System.out.println("\nEnter Player's Name to view stats: --Enter blank for main menu");
-            String name = scanner.nextLine();
-            Player player = playerMap.get(name.toLowerCase()); // using maps to easily locate the player instead of having to use loops etc.
+            String name = scanner.nextLine().trim(); // Trim to remove leading/trailing spaces
+            if (name.isEmpty()) {
+                break; // Exit the loop if the name is empty
+            }
 
-            //vertify if there is a response for the
+            Player player = playerMap.get(name.toLowerCase());
+
             if (player != null) {
                 System.out.println(player);
             } else {
                 System.out.println("Player not found.");
             }
 
-            // gathers if they want to see other players.
             String response;
 
             do {
@@ -187,9 +189,8 @@ public class StatManager {
             } while (!response.equalsIgnoreCase("yes") && !response.equalsIgnoreCase("no"));
 
             if (response.equalsIgnoreCase("no")) {
-                searching = false; // ends the loop
+                searching = false;
             }
-
         }
     }
     // Technique : while, if else
@@ -435,14 +436,13 @@ public class StatManager {
     // Technique : If else
     // used by the generate lineup method in order to liist out all the substitues from the list.
     private void printSubstitutes(String positionGroup, List<Player> players, int numStarters) {
-        if (players.size() <= numStarters) { // makes sure that there is enough players for that substitues after printing out all the startesr.
+        if (players.size() <= numStarters) {
             System.out.println(positionGroup + ": No substitutes available");
-            return;
-        }
-
-        System.out.println(positionGroup + ":");
-        for (int i = numStarters; i < players.size(); i++) { // if there is it gets the playres and iterates to list out 2 subs
-            System.out.println(players.get(i).getName());
+        } else {
+            System.out.println(positionGroup + ":");
+            for (int i = numStarters; i < Math.min(numStarters + 2, players.size()); i++) {
+                System.out.println(players.get(i).getName());
+            }
         }
     }
 

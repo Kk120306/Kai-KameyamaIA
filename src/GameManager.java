@@ -70,11 +70,21 @@ public class GameManager {
         // Technique : ArrayLists
         System.out.println("Enter the names of goal scorers (comma-separated):");
         List<String> goalScorers = new ArrayList<>();
-        for (String scorer : scanner.nextLine().split("\\s*,\\s*")) { //Seperates by ','
-            if (isValidString(scorer)) { // if the names are validated
-                goalScorers.add(scorer); // adds player to list
+        String input;
+        do {
+            input = scanner.nextLine();
+            String[] scorerNames = input.split("\\s*,\\s*");
+
+            for (String scorer : scorerNames) {
+                if (isValidString(scorer)) { // Check if the names are valid
+                    goalScorers.add(scorer); // Add the valid player names to the list
+                } else {
+                    System.out.println("Invalid name: " + scorer);
+                    goalScorers.clear(); // Clear the list if an invalid name is encountered
+                    break; // Exit the loop if an invalid name is encountered
+                }
             }
-        }
+        } while (goalScorers.isEmpty());
 
         String mvp = getValidName("Enter the name of the Most Valuable Player (MVP):"); // Collecting MVP names
 
@@ -280,10 +290,10 @@ public class GameManager {
         Game gameToUpdate = findGameByDate(gameDate); // finds the game with the inputted date
 
         if (gameToUpdate != null) {
-            String option = getValidatedString();
+            String option = getValidatedString().toLowerCase(); // Convert input to lowercase
             if (option.equals("remove")) {
                 games.remove(gameToUpdate);
-                saveData(); // save data methods to save in txt file
+                saveData(); // save data methods to save in a txt file
                 System.out.println("Game removed successfully.");
             } else if (option.equals("update")) {
                 updateGameDetails(gameToUpdate); // method to update details
@@ -295,7 +305,6 @@ public class GameManager {
         } else {
             System.out.println("Game not found. Please try again.");
         }
-
     }
 
     // Method responsible for updating game details if the client wishes to remove or update game stats
